@@ -12,6 +12,13 @@ jobs:
     steps:
       - name: Checks out the repo
         uses: actions/checkout@v2
+      
+      - name: Upload main file
+        uses: databricks/upload-dbfs-temp@v0
+        id: upload_file
+        with:
+          local-path: test-harness/databricks_test_harness/run_tests.py
+          dbfs-temp-dir: 'dbfs:/tmp/jmaru/databricks-tests/'
               
       - name: Setup python
         uses: actions/setup-python@v2
@@ -29,23 +36,8 @@ jobs:
           local-path: example/dist/databricks_tests_example-0.0.1-py3-none-any.whl
           dbfs-temp-dir: 'dbfs:/tmp/jmaru/databricks-tests/'
 
-      - name: Trigger pytest 
-        uses: databricks/run-notebook@v0
-        with:
-          local-notebook-path: test-harness/databricks_test_harness/run_tests.py
-          # Install the wheel built in the previous step as a library
-          # on the cluster used to run our notebook
-          libraries-json: >
-            [
-              { "whl": "${{ steps.upload_wheel.outputs.dbfs-file-path }}" }
-            ]
-          # The cluster JSON below is for Azure Databricks. On AWS and GCP, set
-          # node_type_id to an appropriate node type, e.g. "i3.xlarge" for
-          # AWS or "n1-highmem-4" for GCP
-          new-cluster-json: >
-            {
-              "num_workers": 1,
-              "spark_version": "10.4.x-scala2.12",
-              "node_type_id": "i3.xlarge",
-              "num_workers": 1
-            }
+      - name: Trigger run submit
+        uses: microsoft/install-databricks-cli@v1.0.0
+        working-directory: ./example
+        run:
+          databricks runs submit --json-file run_submit.json
