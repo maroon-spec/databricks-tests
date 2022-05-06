@@ -12,11 +12,6 @@ jobs:
     steps:
       - name: Checks out the repo
         uses: actions/checkout@v2
-      # Obtain an AAD token and use it to upload to Databricks.
-      # Note: If running on AWS or GCP, you can directly pass your service principal
-      # token via the databricks-host input instead
-      - name: Setup python
-        uses: actions/setup-python@v2
 
       - name: Upload file
         uses: databricks/upload-dbfs-temp@v0
@@ -25,3 +20,17 @@ jobs:
           local-path: test-harness/databricks_test_harness/run_tests.py
           dbfs-file-path:: 'dbfs:/tmp/jmaru/databricks-github-actions/'
           
+      - name: Setup python
+        uses: actions/setup-python@v2
+        
+      - name: Build wheel
+        run:
+          cd example
+          python setup.py bdist_wheel
+          
+      - name: Upload Wheel
+        uses: databricks/upload-dbfs-temp@v0
+        id: upload_wheel
+        with:
+          local-path: example/dist/databricks_tests_example-0.0.1-py3-none-any.whl
+          dbfs-file-path:: 'dbfs:/tmp/jmaru/databricks-github-actions/'
