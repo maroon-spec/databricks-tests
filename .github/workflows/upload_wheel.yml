@@ -36,8 +36,10 @@ jobs:
           local-path: example/dist/databricks_tests_example-0.0.1-py3-none-any.whl
           dbfs-temp-dir: 'dbfs:/tmp/jmaru/jobs/myapp/'
 
+      - name: install databricks cli
+        run: pip install databricks-cli
+        
       - name: Trigger run submit
-        uses: microsoft/install-databricks-cli@v1.0.0
         working-directory: ./example
         run:
           databricks runs submit --json-file run_submit.json
