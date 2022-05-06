@@ -12,7 +12,10 @@ jobs:
     steps:
       - name: Checks out the repo
         uses: actions/checkout@v2
-
+        
+      - name: Setup python
+        uses: actions/setup-python@v2
+        
       - name: Upload file
         uses: databricks/upload-dbfs-temp@v0
         id: upload_file
@@ -20,8 +23,6 @@ jobs:
           local-path: test-harness/databricks_test_harness/run_tests.py
           dbfs-file-path: 'dbfs:/tmp/jmaru/databricks-tests/'
           
-      - name: Setup python
-        uses: actions/setup-python@v2
       - name: Install wheel
         run: pip install wheel
       - name: Build wheel
