@@ -21,7 +21,9 @@ jobs:
         id: upload_file
         with:
           local-path: test-harness/databricks_test_harness/run_tests.py
-          dbfs-temp-dir: 'dbfs:/tmp/jmaru/databricks-tests/'
+      - name: Copy file to avoid cleanup
+          run: 
+            cp ${{ steps.upload_file.outputs.dbfs-file-path }} 'dbfs:/tmp/jmaru/databricks-tests/'
           
       - name: Install wheel
         run: pip install wheel
@@ -36,3 +38,6 @@ jobs:
         with:
           local-path: example/dist/databricks_tests_example-0.0.1-py3-none-any.whl
           dbfs-temp-dir: 'dbfs:/tmp/jmaru/databricks-tests/'
+      - name: Copy wheel to avoid cleanup
+          run: 
+            cp ${{ steps.upload_wheel.outputs.dbfs-file-path }} 'dbfs:/tmp/jmaru/databricks-tests/'
