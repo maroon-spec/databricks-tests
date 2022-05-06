@@ -18,7 +18,7 @@ jobs:
         id: upload_file
         with:
           local-path: test-harness/databricks_test_harness/run_tests.py
-          dbfs-file-path:: 'dbfs:/tmp/jmaru/databricks-github-actions/'
+          dbfs-file-path: 'dbfs:/tmp/jmaru/databricks-github-actions/'
           
       - name: Setup python
         uses: actions/setup-python@v2
