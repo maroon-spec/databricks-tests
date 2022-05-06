@@ -34,4 +34,4 @@ jobs:
         id: upload_wheel
         with:
           local-path: example/dist/databricks_tests_example-0.0.1-py3-none-any.whl
-          dbfs-file-path:: 'dbfs:/tmp/jmaru/databricks-github-actions/'
+          dbfs-file-path: 'dbfs:/tmp/jmaru/databricks-github-actions/'
