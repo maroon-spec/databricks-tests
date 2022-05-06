@@ -22,6 +22,6 @@ jobs:
         uses: databricks/upload-dbfs-temp@v0
         id: upload_file
         with:
-          local-path: databricks-tests/test-harness/databricks_test_harness/run_tests.py
+          local-path: test-harness/databricks_test_harness/run_tests.py
           dbfs-temp-dir: 'dbfs:/tmp/jmaru/databricks-github-actions/'
           
