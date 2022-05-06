@@ -24,12 +24,13 @@ jobs:
         uses: actions/setup-python@v2
         
       - name: Build wheel
+        working-directory: ./example
         run:
-          python example/setup.py bdist_wheel
+          python setup.py bdist_wheel
           
       - name: Upload Wheel
         uses: databricks/upload-dbfs-temp@v0
         id: upload_wheel
         with:
-          local-path: dist/databricks_tests_example-0.0.1-py3-none-any.whl
+          local-path: example/dist/databricks_tests_example-0.0.1-py3-none-any.whl
           dbfs-file-path:: 'dbfs:/tmp/jmaru/databricks-github-actions/'
