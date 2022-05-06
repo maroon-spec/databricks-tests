@@ -1,0 +1,27 @@
+name: Upload Python Wheel to DBFS then run notebook using whl.
+
+on:
+  pull_request
+
+env:
+  DATABRICKS_HOST: https://e2-demo-tokyo.cloud.databricks.com/
+  DATABRICKS_TOKEN: ${{ secrets.dbToken }}
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checks out the repo
+        uses: actions/checkout@v2
+      # Obtain an AAD token and use it to upload to Databricks.
+      # Note: If running on AWS or GCP, you can directly pass your service principal
+      # token via the databricks-host input instead
+      - name: Setup python
+        uses: actions/setup-python@v2
+
+      - name: Upload file
+        uses: databricks/upload-dbfs-temp@v0
+        id: upload_file
+        with:
+          local-path: test-harness/databricks_test_harness/run_tests.py
+          dbfs-temp-dir: 'dbfs:/tmp/jmaru/databricks-github-actions'
+          
