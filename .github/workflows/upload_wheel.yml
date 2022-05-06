@@ -13,18 +13,14 @@ jobs:
       - name: Checks out the repo
         uses: actions/checkout@v2
         
-      - name: Setup python
-        uses: actions/setup-python@v2
-        
       - name: Upload file
         uses: databricks/upload-dbfs-temp@v0
         id: upload_file
         with:
           local-path: test-harness/databricks_test_harness/run_tests.py
-      - name: Copy file to avoid cleanup
-        run: 
-          cp ${{ steps.upload_file.outputs.dbfs-file-path }} 'dbfs:/tmp/jmaru/databricks-tests/'
-          
+        
+      - name: Setup python
+        uses: actions/setup-python@v2
       - name: Install wheel
         run: pip install wheel
       - name: Build wheel
@@ -38,6 +34,4 @@ jobs:
         with:
           local-path: example/dist/databricks_tests_example-0.0.1-py3-none-any.whl
           dbfs-temp-dir: 'dbfs:/tmp/jmaru/databricks-tests/'
-      - name: Copy wheel to avoid cleanup
-        run: 
-          cp ${{ steps.upload_wheel.outputs.dbfs-file-path }} 'dbfs:/tmp/jmaru/databricks-tests/'
+
