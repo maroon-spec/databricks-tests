@@ -22,7 +22,8 @@ jobs:
           
       - name: Setup python
         uses: actions/setup-python@v2
-        
+      - name: Install wheel
+        run: pip install wheel
       - name: Build wheel
         working-directory: ./example
         run:
