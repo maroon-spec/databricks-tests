@@ -1,6 +1,7 @@
-name: Upload Python Wheel to DBFS then run notebook using whl.
+name: Databricks Pytest Integration test.
 
 on:
+  push 
   pull_request
 
 env:
