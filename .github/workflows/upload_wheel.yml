@@ -1,8 +1,7 @@
 name: Databricks Pytest Integration test.
 
 on:
-  push:
-  pull_request:
+  [push, pull_request]
 
 env:
   DATABRICKS_HOST: https://e2-demo-tokyo.cloud.databricks.com/
