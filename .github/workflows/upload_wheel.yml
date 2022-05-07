@@ -1,0 +1,45 @@
+name: Databricks Pytest Integration test.
+
+on:
+  [pull_request]
+
+env:
+  DATABRICKS_HOST: https://e2-demo-tokyo.cloud.databricks.com/
+  DATABRICKS_TOKEN: ${{ secrets.dbToken }}
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checks out the repo
+        uses: actions/checkout@v2
+      
+      - name: Upload main file
+        uses: databricks/upload-dbfs-temp@v0
+        id: upload_file
+        with:
+          local-path: test-harness/databricks_test_harness/run_tests.py
+          dbfs-temp-dir: 'dbfs:/tmp/jmaru/jobs/myapp/'
+              
+      - name: Setup python
+        uses: actions/setup-python@v2
+      - name: Install wheel
+        run: pip install wheel
+      - name: Build wheel
+        working-directory: ./example
+        run:
+          python setup.py bdist_wheel
+          
+      - name: Upload Wheel
+        uses: databricks/upload-dbfs-temp@v0
+        id: upload_wheel
+        with:
+          local-path: example/dist/databricks_tests_example-0.0.1-py3-none-any.whl
+          dbfs-temp-dir: 'dbfs:/tmp/jmaru/jobs/myapp/'
+
+      - name: install databricks cli
+        run: pip install databricks-cli
+        
+      - name: Trigger run submit
+        working-directory: ./example
+        run:
+          databricks runs submit --json-file run_submit.json
