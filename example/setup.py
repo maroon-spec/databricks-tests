@@ -1,3 +1,4 @@
+## Databricks notebook source
 from setuptools import setup
   
 setup(name='databricks_tests_example',
